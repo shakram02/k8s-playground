@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: golobola-app-settings
+  name: garabola-app-settings
 
 data:
-  garabolaName: "Garol Knidder"
+  garabolaName: "Garol Kniddera: you!\n"

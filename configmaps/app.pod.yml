@@ -10,4 +10,4 @@ spec:
       args: ["-c", "echo $garabolaName is a big Garabollan"]
       envFrom: 
         - configMapRef:
-            name: golobola-app-settings
+            name: garabola-app-settings
