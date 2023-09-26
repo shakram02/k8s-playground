@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-deployment-frontend
+  labels:
+    app: my-nginx-deployment-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+      app: my-nginx-deployment-frontend
+
+  template:
+    metadata:
+      labels:
+        tier: frontend
+        app: my-nginx-deployment-frontend
+    spec:
+      containers:
+        - name: my-nginx-deployment-frontend
+          image: nginx:mainline-alpine3.18
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+            periodSeconds: 15
+            failureThreshold: 1
+            httpGet:
+              path: /index.html
+              port: liveness-port
+              httpHeaders:
+                - name: Custom-Header
+                  value: Awesome

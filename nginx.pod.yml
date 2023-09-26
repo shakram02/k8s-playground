@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx-potato-single-pod
+spec:
+  containers:
+    - name: my-nginx-potato-container
+      image: nginx:mainline-alpine3.18
+      ports:
+        - name: liveness-port
+          containerPort: 80
+          hostPort: 40050
+      resources:
+      livenessProbe:
+        initialDelaySeconds: 30
+        timeoutSeconds: 2
+        periodSeconds: 15
+        failureThreshold: 1
+        exec:
+        tcpSocket:
+        httpGet:
+          path: /index.html
+          port: liveness-port
+          httpHeaders:
+            - name: Custom-Header
+              value: Awesome

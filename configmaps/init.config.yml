@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: golobola-app-settings
+
+data:
+  garabolaName: "Garol Knidder"

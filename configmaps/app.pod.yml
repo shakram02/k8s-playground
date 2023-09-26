@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "config-map-app-pod"
+spec:
+  containers:
+    - name: alpine-linux-container
+      image: alpine:3.16
+      command: ["/bin/sh"]
+      args: ["-c", "echo $garabolaName is a big Garabollan"]
+      envFrom: 
+        - configMapRef:
+            name: golobola-app-settings
