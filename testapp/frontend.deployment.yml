@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    tier: frontend
+
+# metadata.labels sets the labels that apply to the deployment.
+# spec.template.metadata.labels sets the labels that apply to pods management by the deployment.
+# The values in spec.selectors.matchLabels are used to select pods,
+# so they need to match the labels in spec.template.metadata.labels;
+# they have nothing to do with the Deployment's metadata.labels.
+# https://serverfault.com/a/1134937
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  # volumes:
+  #   - name:
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      volumes:
+        - name: html-volume
+          hostPath:
+            path: /[SystemPath]/k8s/testapp/html  # TODO: add path value
+            type: DirectoryOrCreate
+      containers:
+        - name: nginx-server
+          image: nginx:mainline-alpine3.18
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "20m"
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+            periodSeconds: 15
+            failureThreshold: 1
+            httpGet:
+              path: /product.html
+              port: liveness-port
+              httpHeaders:
+                - name: Custom-Header
+                  value: Awesome
+          volumeMounts:
+            - name: html-volume
+              mountPath: /usr/share/nginx/html/
+
